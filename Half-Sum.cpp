@@ -11,42 +11,47 @@ int calculate_sum(const std::vector<int> &original_set){
 	}
 	return (ret);
 }
-void check_half_sum_subset(std::vector<int> &half_sum_subset, const std::vector<int> original_set, const int half_sum){
-	// Check if a subset exists which can calculate the half_sum
-	int size_of_original_set = original_set.size();
-	int current_sum=0;
-	int half_sum_found = false;
-	for (int i = 0; i < size_of_original_set-1; i++){
-		// We subtract 1 from the size because the last value in the set is checked in the second for loop.
-		current_sum=original_set[i];
-		half_sum_subset.push_back(original_set[i]);
-		if (current_sum==half_sum){
-			half_sum_found=true;
-			break;
-		}
 
-		for (int j = i+1; j < size_of_original_set; j++){
-			current_sum+=original_set[j];
-			half_sum_subset.push_back(original_set[j]);
-			if (current_sum==half_sum){
-				half_sum_found=true;
-				break;
-			}
-			if (current_sum > half_sum){
-				// If the current_sum is greater than half_sum than the current subset cannot be correct
-				while(j > i-1){
-					half_sum_subset.pop_back();
-					j--;
-				}
-				break;
-			}
-		}
-		if (half_sum_found){
-			break;
+bool half_sum_check(std::vector<int> &half_sum_subset, const std::vector<int> original_set, const int half_sum, int current_sum, const uint index){
+
+	// Recursive Function
+	std::cout << "{";
+	for (uint i = 0; i < half_sum_subset.size();i++){
+		std::cout << half_sum_subset[i];
+		if (i != half_sum_subset.size()-1){
+			std::cout << ", ";
 		}
 	}
-	return;
-}	
+	std::cout << "}" << std::endl;
+
+	if (current_sum==half_sum){
+		// We are done because we found a subset whose sum is a half sum of the original_set
+
+		// Base Case
+		return true;
+	}
+	if (current_sum>half_sum){
+		return false;
+		// If current sum is greather then no matter how many values we add it will still be greater than half_sum given all our values are positive.
+	}
+
+	for (uint i = index; i < original_set.size(); i++){
+
+		current_sum+=original_set[i];
+		half_sum_subset.push_back(original_set[i]);
+		if (half_sum_check(half_sum_subset, original_set, half_sum, current_sum, i+1)){
+				return true;
+		}
+		else{
+			half_sum_subset.pop_back();
+			current_sum-=original_set[i];
+		}
+	}
+	// If after checking all the possible subsets and none of them produced a suitable subset which contains a half-sum then a half-sum must not exist for this original_set.
+	return false;
+
+
+}
 
 int main(int argc, char const *argv[])
 {
@@ -71,11 +76,7 @@ int main(int argc, char const *argv[])
 	}
 	int half_sum = sum/2;
 	std::vector<int> half_sum_subset;
-	check_half_sum_subset(half_sum_subset, original_set, half_sum);
-	if (half_sum_subset.empty()){
-		std::cout << "No subset exists which gives a half sum of the original set." << std::endl;
-	}
-	else{
+	if (half_sum_check(half_sum_subset, original_set, half_sum, 0, 0)){
 		std::cout << "Here is a subset which gives a half sum of the original set." << std::endl;
 		std::cout << "{";
 		for (uint i = 0; i < half_sum_subset.size();i++){
@@ -85,6 +86,9 @@ int main(int argc, char const *argv[])
 			}
 		}
 		std::cout << "}" << std::endl;
+	}
+	else{
+		std::cout << "No subset exists which gives a half sum of the original set." << std::endl;
 	}
 	return 0;
 }
