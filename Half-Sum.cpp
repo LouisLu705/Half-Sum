@@ -15,6 +15,8 @@ int calculate_sum(const std::vector<int> &original_set){
 bool half_sum_check(std::vector<int> &half_sum_subset, const std::vector<int> original_set, const int half_sum, int current_sum, const uint index){
 
 	// Recursive Function
+	/************************************************************
+	 Uncomment this to debug the half_sum_subsets being generated
 	std::cout << "{";
 	for (uint i = 0; i < half_sum_subset.size();i++){
 		std::cout << half_sum_subset[i];
@@ -23,6 +25,7 @@ bool half_sum_check(std::vector<int> &half_sum_subset, const std::vector<int> or
 		}
 	}
 	std::cout << "}" << std::endl;
+	*************************************************************/
 
 	if (current_sum==half_sum){
 		// We are done because we found a subset whose sum is a half sum of the original_set
