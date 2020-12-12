@@ -74,7 +74,7 @@ int main(int argc, char const *argv[])
 	}
 	int sum = calculate_sum(original_set);
 	if (((sum-1) % 2)==0){
-		std::cout << "The set of numbers cannot have a half sum given that the sum of the set is odd and each value is a natural number." << std::endl;
+		std::cout << "The set of numbers cannot have a half sum given that the Half-Sum of the set will be a floating point value and each value in the set is a natural number." << std::endl;
 		return 0;
 	}
 	int half_sum = sum/2;
